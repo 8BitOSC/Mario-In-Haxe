@@ -1,5 +1,6 @@
 package sprites;
 
+import flixel.math.FlxPoint;
 import sprites.Tile;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxG;
@@ -53,7 +54,23 @@ class TileGroup extends FlxTypedGroup<Tile> {
 				var y:Float = Reflect.field(spr, 'y');
 				var w:Float = Reflect.field(spr, 'width');
 				var h:Float = Reflect.field(spr, 'height');
-				doWeDraw = doWeDraw && (x + w > cameraBounds.min.x) && (x < cameraBounds.max.x) && (y + h > cameraBounds.min.y) && (y < cameraBounds.max.y);
+				// trace(x);
+				// trace(y);
+				// trace(cameraBounds);
+				// doWeDraw = if do we draw and the following:
+				// x is greater than the camera bounds min x
+				// x is less than the camera bounds max x
+				// y is greater than the camera bounds min y
+				// y is less than the camera bounds max y
+				// width/height is added to x/y before calculations
+				x += w;
+				y += h;
+				// doWeDraw = doWeDraw && (x > cameraBounds.min.x && x < cameraBounds.max.x && y > cameraBounds.min.y && y < cameraBounds.max.y);
+				// doWeDraw = dowedraw and x is greater than cameraBounds min x
+				// x is less than FlxG.width
+				// y is greater than cameraBounds min y
+				// y is less than FlxG.height
+				doWeDraw = doWeDraw && (x > cameraBounds.min.x && x < FlxG.width && y > cameraBounds.min.y && y < FlxG.height);
 				if (doWeDraw) {
 					spr.draw();
 				}

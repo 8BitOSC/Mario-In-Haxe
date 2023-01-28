@@ -19,6 +19,11 @@ class State extends flixel.FlxState {
 			}
 
 			for (spr in members) {
+				if(Reflect.field(spr, 'x') == null){
+					spr.draw();
+					FlxCamera._defaultCameras = oldDefaultCameras;
+					return;
+				}
 				var doWeDraw:Bool = (spr != null && spr.exists && spr.visible);
 				var x:Float = Reflect.field(spr, 'x');
 				var y:Float = Reflect.field(spr, 'y');

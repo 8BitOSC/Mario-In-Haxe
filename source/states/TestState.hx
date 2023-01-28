@@ -31,17 +31,8 @@ class TestState extends State {
 		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
 		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
 
-		var toAdd:LevelMeta = {tiles: [], theme: "ground", scale: 2};
 
-		for (i in 0...25) {
-			toAdd.tiles.push({
-				x: i,
-				y: 0,
-				type: 'ground'
-			});
-		}
-
-		var block = new TileGroup(toAdd);
+		var block = new TileGroup({tiles: [for (i in 0...250) {x: i, y: 0, type: 'ground'}], theme: "ground", scale: 2});
 		add(block);
 	}
 
@@ -51,9 +42,9 @@ class TestState extends State {
 			var move:Float = 1;
 			bg.x += move;
 			bg.y += move;
-			//if (bg.x >= 0)
+			// if (bg.x >= 0)
 			//	bg.x = -200;
-			//if (bg.y >= 0)
+			// if (bg.y >= 0)
 			//	bg.y = -200;
 		}
 		if (FlxG.keys.pressed.UP)
