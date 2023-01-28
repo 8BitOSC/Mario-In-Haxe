@@ -19,12 +19,29 @@ class TestState extends State {
 		bg.y = 1;
 
 		add(bg);
+		// x, y, width, height, camera width, camera height, camera zoom, camera scroll x, camera scroll y
+		FlxG.watch.add(bg,'x','x');
+		FlxG.watch.add(bg,'y','y');
+		FlxG.watch.add(bg,'width','width');
+		FlxG.watch.add(bg,'height','height');
+		FlxG.watch.add(FlxG.camera,'zoom','zoom');
+		FlxG.watch.add(FlxG.camera.scroll,'x','scrollX');
+		FlxG.watch.add(FlxG.camera.scroll,'y','scrollY');
+		FlxG.watch.add(FlxG,'width','cameraWidth');
+		FlxG.watch.add(FlxG,'height','cameraHeight');
+
+		var sprite = new FlxSprite(0, 0).loadGraphic('assets/images/tiles/ground/blocks.png',true,16,16);
+		sprite.animation.add('block',[0]);
+		sprite.animation.add('block2',[1]);
+		sprite.animation.play('block');
+		sprite.screenCenter();
+		add(sprite);
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 		if (bg != null) {
-			var move:Float = 0.25;
+			var move:Float = 1;
 			bg.x += move;
 			bg.y += move;
 			if (bg.x >= 0)
@@ -32,6 +49,12 @@ class TestState extends State {
 			if (bg.y >= 0)
 				bg.y = -200;
 		}
-		if(FlxG.keys.justPressed.ANY) FlxG.resetState();
+		if(FlxG.keys.pressed.UP) FlxG.camera.zoom -= 0.1;
+		if(FlxG.keys.pressed.DOWN) FlxG.camera.zoom += 0.1;
+		if(FlxG.keys.pressed.A) FlxG.camera.scroll.x -= 2;
+		if(FlxG.keys.pressed.D) FlxG.camera.scroll.x += 2;
+		if(FlxG.keys.pressed.W) FlxG.camera.scroll.y -= 2;
+		if(FlxG.keys.pressed.S) FlxG.camera.scroll.y += 2;
+		if(FlxG.keys.justPressed.R) FlxG.resetState();
 	}
 }
