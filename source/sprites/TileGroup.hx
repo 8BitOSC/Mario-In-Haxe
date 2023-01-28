@@ -40,8 +40,8 @@ class TileGroup extends FlxTypedGroup<Tile> {
 	}
 
 	override public function draw():Void {
-        var cameraBounds = Util.getCameraBounds();
-        @:privateAccess {
+		var cameraBounds = Util.getCameraBounds();
+		@:privateAccess {
 			var oldDefaultCameras = FlxCamera._defaultCameras;
 			if (cameras != null) {
 				FlxCamera._defaultCameras = cameras;
@@ -61,6 +61,5 @@ class TileGroup extends FlxTypedGroup<Tile> {
 
 			FlxCamera._defaultCameras = oldDefaultCameras;
 		}
-		super.draw();
 	}
 }
