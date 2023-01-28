@@ -24,8 +24,16 @@ class TileGroup extends FlxTypedGroup<Tile> {
 	override public function new(data:LevelMeta) {
 		super(0);
 		for (t in data.tiles) {
-            var multip:Float = 16 * data.scale;
-			add(new Tile(t.x*multip, t.y*multip, data.scale, data.theme, t.type));
+			trace(t);
+			var w:Float = 16 * data.scale;
+			var x:Float = (t.x) * w;
+			var y:Float = (t.y) * w;
+			x += w / 2;
+			var subVal:Int = 6;
+			x -= subVal;
+			y += w / 2;
+			y += subVal;
+			add(new Tile(x, FlxG.height - y, data.scale, data.theme, t.type));
 		}
 	}
 

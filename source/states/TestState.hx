@@ -43,6 +43,11 @@ class TestState extends State {
 					x: 1,
 					y: 0,
 					type: 'ground'
+				},
+				{
+					x: 2,
+					y: 0,
+					type: 'ground'
 				}
 			]
 		});
