@@ -9,8 +9,9 @@ import Std.isOfType as is;
 import tools.Util;
 
 class State extends flixel.FlxState {
+	private var cameraBounds:MinAndMax = Util.getCameraBounds();
+
 	override public function draw():Void {
-		var points:MinAndMax = Util.getCameraBounds();
 		for (spr in members) {
 			var doWeDraw:Bool = (spr != null && spr.exists && spr.visible);
 			if (Reflect.field(spr, 'x') != null) {
@@ -18,8 +19,11 @@ class State extends flixel.FlxState {
 				var y:Float = Reflect.field(spr, 'y');
 				var w:Float = Reflect.field(spr, 'width');
 				var h:Float = Reflect.field(spr, 'height');
-				Reflect.setField(spr, 'visible', doWeDraw && (x + w > points.min.x) && (x < points.max.x) &&
-				(y + h > points.min.y) && (y < points.max.y));
+				Reflect.setField(spr, 'visible', doWeDraw
+					&& (x + w > cameraBounds.min.x)
+					&& (x < cameraBounds.max.x)
+					&& (y + h > cameraBounds.min.y)
+					&& (y < cameraBounds.max.y));
 			}
 		}
 		super.draw();
