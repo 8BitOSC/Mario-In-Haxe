@@ -7,6 +7,7 @@ import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.FlxObject;
+import tools.Util;
 
 typedef TileMeta = {
 	x:Int,
@@ -39,15 +40,26 @@ class TileGroup extends FlxTypedGroup<Tile> {
 	}
 
 	override public function draw():Void {
-		for (spr in members) {
-			var doWeDraw:Bool = (spr != null && spr.exists && spr.visible);
-			if (Reflect.field(spr, 'x') != null) {
+        var cameraBounds = Util.getCameraBounds();
+        @:privateAccess {
+			var oldDefaultCameras = FlxCamera._defaultCameras;
+			if (cameras != null) {
+				FlxCamera._defaultCameras = cameras;
+			}
+
+			for (spr in members) {
+				var doWeDraw:Bool = (spr != null && spr.exists && spr.visible);
 				var x:Float = Reflect.field(spr, 'x');
 				var y:Float = Reflect.field(spr, 'y');
 				var w:Float = Reflect.field(spr, 'width');
 				var h:Float = Reflect.field(spr, 'height');
-				Reflect.setField(spr, 'visible', doWeDraw && (x > 0) && (x < FlxG.width) && (y > 0) && (y < FlxG.height));
+				doWeDraw = doWeDraw && (x + w > cameraBounds.min.x) && (x < cameraBounds.max.x) && (y + h > cameraBounds.min.y) && (y < cameraBounds.max.y);
+				if (doWeDraw) {
+					spr.draw();
+				}
 			}
+
+			FlxCamera._defaultCameras = oldDefaultCameras;
 		}
 		super.draw();
 	}
