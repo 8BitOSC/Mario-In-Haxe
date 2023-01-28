@@ -1,13 +1,12 @@
-package;
+package states;
 
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
-import wasteofhaxe.WasteOfHaxe2 as WasteOfHaxe;
-import sys.io.File;
+import states.State;
+import flixel.FlxSprite;
 
-class MainState extends FlxState {
+class TestState extends State {
 	var bg:FlxSprite = null;
 	var user:String = '';
 
