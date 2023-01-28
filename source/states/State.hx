@@ -9,7 +9,7 @@ import Std.isOfType as is;
 import tools.Util;
 
 class State extends flixel.FlxState {
-	private var cameraBounds:MinAndMax = Util.getCameraBounds();
+	private var cameraBounds:MinAndMax = Util.getCameraBounds(FlxG.camera);
 
 	override public function draw():Void {
 		for (spr in members) {

@@ -12,9 +12,7 @@ typedef MinAndMax = {
 }
 
 class Util {
-	public static function getCameraBounds(camera:Null<FlxCamera> = null):MinAndMax {
-		if (camera == null)
-			camera = FlxG.camera;
+	public static function getCameraBounds(camera:FlxCamera):MinAndMax {
 		var width:Int = Std.int(camera.zoom * FlxG.width);
 		var height:Int = Std.int(camera.zoom * FlxG.height);
 		var min:FlxPoint = camera.scroll;
