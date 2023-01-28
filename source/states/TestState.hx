@@ -57,9 +57,9 @@ class TestState extends State {
 			//	bg.y = -200;
 		}
 		if (FlxG.keys.pressed.UP)
-			FlxG.camera.zoom -= 0.1;
+			FlxG.camera.zoom += 0.01;
 		if (FlxG.keys.pressed.DOWN)
-			FlxG.camera.zoom += 0.1;
+			FlxG.camera.zoom -= 0.01;
 		if (FlxG.keys.pressed.A)
 			FlxG.camera.scroll.x -= 2;
 		if (FlxG.keys.pressed.D)

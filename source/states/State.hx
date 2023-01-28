@@ -12,25 +12,30 @@ class State extends flixel.FlxState {
 	private var cameraBounds:MinAndMax = Util.getCameraBounds();
 
 	override public function draw():Void {
-		for (spr in members) {
-			var doWeDraw:Bool = (spr != null && spr.exists && spr.visible);
-			if (Reflect.field(spr, 'x') != null) {
+		@:privateAccess {
+			var oldDefaultCameras = FlxCamera._defaultCameras;
+			if (cameras != null) {
+				FlxCamera._defaultCameras = cameras;
+			}
+
+			for (spr in members) {
+				var doWeDraw:Bool = (spr != null && spr.exists && spr.visible);
 				var x:Float = Reflect.field(spr, 'x');
 				var y:Float = Reflect.field(spr, 'y');
 				var w:Float = Reflect.field(spr, 'width');
 				var h:Float = Reflect.field(spr, 'height');
-				Reflect.setField(spr, 'visible', doWeDraw
-					&& (x + w > cameraBounds.min.x)
-					&& (x < cameraBounds.max.x)
-					&& (y + h > cameraBounds.min.y)
-					&& (y < cameraBounds.max.y));
+				doWeDraw = doWeDraw && (x + w > cameraBounds.min.x) && (x < cameraBounds.max.x) && (y + h > cameraBounds.min.y) && (y < cameraBounds.max.y);
+				if (doWeDraw) {
+					spr.draw();
+				}
 			}
+
+			FlxCamera._defaultCameras = oldDefaultCameras;
 		}
-		super.draw();
 	}
 
 	override public function update(elapsed:Float):Void {
-		super.update(elapsed);
 		cameraBounds = Util.getCameraBounds();
+		super.update(elapsed);
 	}
 }
