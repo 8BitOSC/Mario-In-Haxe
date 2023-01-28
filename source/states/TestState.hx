@@ -28,8 +28,8 @@ class TestState extends State {
 		FlxG.watch.add(FlxG.camera, 'zoom', 'zoom');
 		FlxG.watch.add(FlxG.camera.scroll, 'x', 'scrollX');
 		FlxG.watch.add(FlxG.camera.scroll, 'y', 'scrollY');
-		FlxG.watch.add(FlxG, 'width', 'cameraWidth');
-		FlxG.watch.add(FlxG, 'height', 'cameraHeight');
+		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
+		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
 
 		var toAdd:LevelMeta = {tiles: [], theme: "ground", scale: 2};
 
