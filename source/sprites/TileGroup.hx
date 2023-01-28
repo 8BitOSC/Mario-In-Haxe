@@ -24,7 +24,6 @@ class TileGroup extends FlxTypedGroup<Tile> {
 	override public function new(data:LevelMeta) {
 		super(0);
 		for (t in data.tiles) {
-			trace(t);
 			var w:Float = 16 * data.scale;
 			var x:Float = (t.x) * w;
 			var y:Float = (t.y) * w;
@@ -34,34 +33,22 @@ class TileGroup extends FlxTypedGroup<Tile> {
 			y += w / 2;
 			y += subVal;
 			add(new Tile(x, FlxG.height - y, data.scale, data.theme, t.type));
+			FlxG.log.add(x);
+			FlxG.log.add(FlxG.height - y);
 		}
 	}
 
 	override public function draw():Void {
-		@:privateAccess {
-			var i:Int = 0;
-			var spr:Tile = null;
-
-			var oldDefaultCameras = FlxCamera._defaultCameras;
-			if (cameras != null) {
-				FlxCamera._defaultCameras = cameras;
+		for (spr in members) {
+			var doWeDraw:Bool = (spr != null && spr.exists && spr.visible);
+			if (Reflect.field(spr, 'x') != null) {
+				var x:Float = Reflect.field(spr, 'x');
+				var y:Float = Reflect.field(spr, 'y');
+				var w:Float = Reflect.field(spr, 'width');
+				var h:Float = Reflect.field(spr, 'height');
+				Reflect.setField(spr, 'visible', doWeDraw && (x > 0) && (x < FlxG.width) && (y > 0) && (y < FlxG.height));
 			}
-
-			while (i < length) {
-				spr = members[i++];
-
-				var doWeDraw:Bool = (spr != null && spr.exists && spr.visible);
-				var x:Float = spr.x;
-				var y:Float = spr.y;
-				var w:Float = spr.width;
-				var h:Float = spr.height;
-				doWeDraw = doWeDraw && (x + w > 0) && (x < FlxG.width) && (y + h > 0) && (y < FlxG.height);
-				if (doWeDraw) {
-					spr.draw();
-				}
-			}
-
-			FlxCamera._defaultCameras = oldDefaultCameras;
 		}
+		super.draw();
 	}
 }

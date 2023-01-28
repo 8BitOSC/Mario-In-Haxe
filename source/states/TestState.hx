@@ -5,6 +5,7 @@ import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
 import states.State;
 import flixel.FlxSprite;
+import sprites.TileGroup;
 
 class TestState extends State {
 	var bg:FlxSprite = null;
@@ -30,27 +31,17 @@ class TestState extends State {
 		FlxG.watch.add(FlxG, 'width', 'cameraWidth');
 		FlxG.watch.add(FlxG, 'height', 'cameraHeight');
 
-		var block = new sprites.TileGroup({
-			theme: "ground",
-			scale: 5,
-			tiles: [
-				{
-					x: 0,
-					y: 0,
-					type: 'ground'
-				},
-				{
-					x: 1,
-					y: 0,
-					type: 'ground'
-				},
-				{
-					x: 2,
-					y: 0,
-					type: 'ground'
-				}
-			]
-		});
+		var toAdd:LevelMeta = {tiles: [], theme: "ground", scale: 2};
+
+		for (i in 0...25) {
+			toAdd.tiles.push({
+				x: i,
+				y: 0,
+				type: 'ground'
+			});
+		}
+
+		var block = new TileGroup(toAdd);
 		add(block);
 	}
 
@@ -60,10 +51,10 @@ class TestState extends State {
 			var move:Float = 1;
 			bg.x += move;
 			bg.y += move;
-			if (bg.x >= 0)
-				bg.x = -200;
-			if (bg.y >= 0)
-				bg.y = -200;
+			//if (bg.x >= 0)
+			//	bg.x = -200;
+			//if (bg.y >= 0)
+			//	bg.y = -200;
 		}
 		if (FlxG.keys.pressed.UP)
 			FlxG.camera.zoom -= 0.1;
