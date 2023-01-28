@@ -4,22 +4,18 @@ import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.math.FlxPoint;
 
-typedef PointWithSize = {
-	var x:Float;
-	var y:Float;
-	var width:Int;
-	var height:Int;
+typedef MinAndMax = {
+	var min:FlxPoint;
+    var max:FlxPoint;
 }
 
 class Util {
-	public function getCameraBounds(camera:FlxCamera):PointWithSize {
+	public static function getCameraBounds(camera:FlxCamera = null):MinAndMax {
+        if(camera == null) camera = FlxG.camera;
 		var width:Int = Std.int(camera.zoom * FlxG.width);
 		var height:Int = Std.int(camera.zoom * FlxG.height);
-		return {
-			x: camera.scroll.x,
-			y: camera.scroll.y,
-			width: width,
-			height: height
-		};
+		var min:FlxPoint = camera.scroll;
+        var max:FlxPoint = new FlxPoint(min.x + width, min.y + height);
+        return {min: min, max: max};
 	}
 }
