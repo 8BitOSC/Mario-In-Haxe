@@ -13,7 +13,8 @@ import tools.Util;
 typedef TileMeta = {
 	x:Int,
 	y:Int,
-	type:String
+	type:String,
+	id:Int
 }
 
 typedef LevelMeta = {
@@ -26,20 +27,65 @@ class TileGroup extends FlxTypedGroup<Tile> {
 	override public function new(data:LevelMeta) {
 		super(0);
 		for (t in data.tiles) {
-			addNewTile(data,t);
+			addNewTile(data, t);
 		}
 	}
 
-	function addNewTile(data:LevelMeta, t:TileMeta) {
+	public function searchForTile(id:Int, ?callback:Tile->Void):Tile {
+		id += 1;
+		trace(this.members);
+		trace(callback);
+		for (t in this.members) {
+			if(t == null) continue;
+			if (t.id == id) {
+				if (callback != null) {
+					callback(t);
+				}
+				return t;
+			}
+		}
+		return null;
+	}
+
+	public function destroyTile(id:Int):Void {
+		searchForTile(id, function(t:Tile) {
+			var oldId:Int = t.id;
+			this.remove(t);
+			t.destroy();
+			for (i in this.members) {
+				if(Reflect.field(i, 'id') == null) continue;
+				if (i.id > oldId) {
+					i.id -= 1;
+				}
+			}
+		});
+	}
+
+	public function isTileOccupied(x:Int,y:Int):Bool{
+		var toReturn = false;
+		for (t in this.members) {
+			if(t == null) continue;
+			trace(new FlxPoint(x,y));
+			trace(t.actualPosition);
+			if (t.x == x && t.y == y) {
+				toReturn = true;
+			}
+		}
+		return toReturn;
+	}
+
+	public function addNewTile(data:LevelMeta, t:TileMeta) {
 		var w:Float = 16 * data.scale;
 		var x:Float = (t.x) * w;
 		var y:Float = (t.y) * w;
+		var origX:Float = x;
+		var origY:Float = y;
 		x += w / 2;
 		var subVal:Int = 6;
 		x -= subVal;
 		y += w / 2;
 		y += subVal;
-		add(new Tile(x, FlxG.height - y, data.scale, data.theme, t.type));
+		add(new Tile(x, FlxG.height - y, data.scale, data.theme, t.type, t.id,origX,origY));
 	}
 
 	override public function draw():Void {
@@ -72,7 +118,8 @@ class TileGroup extends FlxTypedGroup<Tile> {
 				// x is less than FlxG.width
 				// y is greater than cameraBounds min y
 				// y is less than FlxG.height
-				doWeDraw = doWeDraw && (x+w*1.5 > cameraBounds.min.x && x-w*1.5 < cameraBounds.max.x && y+h > cameraBounds.min.y && y < FlxG.height);
+				doWeDraw = doWeDraw
+					&& (x + w * 1.5 > cameraBounds.min.x && x - w * 1.5 < cameraBounds.max.x && y + h > cameraBounds.min.y && y < FlxG.height);
 				if (doWeDraw) {
 					spr.draw();
 				}

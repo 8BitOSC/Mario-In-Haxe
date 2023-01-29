@@ -16,12 +16,31 @@ class EditorState extends State {
 	var selectedTile:Tile = null;
 
 	var levelInfo:LevelMeta = {
-		tiles: [for (i in 0...50) {x: i, y: 0, type: 'ground'}].concat([for (i in 0...50) {x: i, y: 1, type: 'ground'}]),
+		tiles: [
+			for (i in 0...4)
+				{
+					x: i,
+					y: 0,
+					type: 'ground',
+					id: 1
+				}
+		].concat([
+			for (i in 0...4)
+				{
+					x: i,
+					y: 1,
+					type: 'ground',
+					id: i + 4
+				}
+			]),
 		theme: "ground",
 		scale: 2
 	}
 
 	var tileSize:Float = 16;
+
+	var scrollPosition:FlxPoint = new FlxPoint(0, 0);
+	var selectedTilePosition:FlxPoint = new FlxPoint(0, 0);
 
 	override public function create():Void {
 		super.create();
@@ -37,19 +56,23 @@ class EditorState extends State {
 		add(selectedTile);
 
 		FlxG.watch.add(FlxG.camera, 'zoom', 'zoom');
-		FlxG.watch.add(FlxG.camera.scroll, 'x', 'scrollX');
-		FlxG.watch.add(FlxG.camera.scroll, 'y', 'scrollY');
+		FlxG.watch.add(scrollPosition, 'x', 'scrollX');
+		FlxG.watch.add(scrollPosition, 'y', 'scrollY');
 		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
 		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
 
 		tiles = new TileGroup(levelInfo);
 		add(tiles);
+
+		tiles.destroyTile(0);
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 		var x:Float = Math.floor(FlxG.mouse.x / tileSize) * tileSize;
 		var y:Float = Math.floor(FlxG.mouse.y / tileSize) * tileSize;
+		selectedTilePosition.x = x / tileSize;
+		selectedTilePosition.y = y / tileSize;
 		x += tileSize / 2;
 		var subVal:Int = 7;
 		x -= subVal;
@@ -69,6 +92,34 @@ class EditorState extends State {
 			FlxG.camera.scroll.y -= 4;
 		if (down)
 			FlxG.camera.scroll.y += 4;
+
+		scrollPosition.x = Math.floor(FlxG.camera.scroll.x); /// tileSize);
+		scrollPosition.y = Math.floor(FlxG.camera.scroll.y); // / tileSize);
+		if (scrollPosition.x < 0)
+			scrollPosition.x = 0;
+		if (scrollPosition.y < 0)
+			scrollPosition.y = 0;
+
+		FlxG.camera.scroll.x = scrollPosition.x;
+		FlxG.camera.scroll.y = scrollPosition.y;
+
+		if (FlxG.mouse.pressed) {
+			var nextId:Int = levelInfo.tiles[levelInfo.tiles.length - 1].id + 1;
+			var x:Int = Std.int(selectedTilePosition.x);
+			var y:Int = Std.int(FlxG.height / tileSize - selectedTilePosition.y)-1;
+			trace(new FlxPoint(x, y));
+			trace(tiles.isTileOccupied(x, y));
+			if(tiles.isTileOccupied(x, y))
+				return;
+			var t:TileMeta = {
+				x: x,
+				y: y,
+				type: 'ground',
+				id: nextId
+			};
+			levelInfo.tiles.push(t);
+			tiles.addNewTile(levelInfo, t);
+		}
 	}
 }
 #end
