@@ -10,6 +10,7 @@ import states.State;
 import flixel.FlxSprite;
 import sprites.TileGroup;
 import flixel.math.FlxPoint;
+import tools.Util;
 
 class EditorState extends State {
 	var tiles:TileGroup = null;

@@ -31,7 +31,7 @@ class Tile extends FlxSprite {
 		this.animation.play(type);
 	}
 
-	public static function changeType(type:String){
+	public function changeType(type:String){
 		this.type = type;
 		this.animation.add(type, [animMap.get(type)]);
 		this.animation.play(type);
