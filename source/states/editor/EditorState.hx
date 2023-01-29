@@ -9,15 +9,11 @@ import flixel.FlxSprite;
 import sprites.TileGroup;
 
 class EditorState extends State {
-	var tiles:TileGroup = new TileGroup({
-		tiles: [for (i in 0...50) {x: i, y: 0, type: 'ground'}].concat([for (i in 0...50) {x: i, y: 1, type: 'ground'}]),
-		theme: "ground",
-		scale: 2
-	});
+	var tiles:TileGroup = null;
 	var selectedTile:Tile = null;
 
 	var levelInfo:LevelMeta = {
-		tiles: [],
+		tiles: [for (i in 0...50) {x: i, y: 0, type: 'ground'}].concat([for (i in 0...50) {x: i, y: 1, type: 'ground'}]),
 		theme: "ground",
 		scale: 2
 	}
@@ -27,6 +23,9 @@ class EditorState extends State {
 	override public function create():Void {
 		super.create();
 		bgColor = 0xff8f9aff;
+
+		FlxG.resizeWindow(796,448);
+		FlxG.resizeGame(796,448);
 
 		FlxG.mouse.visible = true;
 		FlxG.mouse.useSystemCursor = true;
@@ -43,6 +42,7 @@ class EditorState extends State {
 		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
 		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
 
+		tiles = new TileGroup(levelInfo);
 		add(tiles);
 	}
 
