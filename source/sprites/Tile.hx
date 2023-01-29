@@ -9,7 +9,9 @@ class Tile extends FlxSprite {
 
 	public var id:Int = -1;
 	public var actualPosition:FlxPoint = null;
-	override public function new(x:Float = 0, y:Float = 0, scale:Int = 5, level:String = 'ground', type:String = 'ground',id:Int = -1,actualX:Float = 0,actualY:Float = 0) {
+	public var anims:Array<String> = [];
+	public var type:String = 'ground';
+	override public function new(x:Float = 0, y:Float = 0, scale:Float = 5, level:String = 'ground', type:String = 'ground',id:Int = -1,actualX:Float = 0,actualY:Float = 0) {
 		this.id = id;
 		this.actualPosition = new FlxPoint(actualX,actualY);
 		super(x, y);
@@ -20,6 +22,17 @@ class Tile extends FlxSprite {
 		animMap.set('block', 3);
 		animMap.set('hardBlock', 9);
 
+		for(k in animMap.keys()) {
+			anims.push(k);
+		}
+
+		this.type = type;
+		this.animation.add(type, [animMap.get(type)]);
+		this.animation.play(type);
+	}
+
+	public static function changeType(type:String){
+		this.type = type;
 		this.animation.add(type, [animMap.get(type)]);
 		this.animation.play(type);
 	}

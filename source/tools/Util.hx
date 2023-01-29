@@ -21,4 +21,7 @@ class Util {
         var max:FlxPoint = new FlxPoint(min.x + width, min.y + height);
         return {min: min, max: max, width: width, height: height};
 	}
+    public static function clamp(value:Float, min:Float, max:Float):Float {
+        return Math.max(min, Math.min(max, value));
+    }
 }

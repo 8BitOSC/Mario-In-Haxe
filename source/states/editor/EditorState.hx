@@ -42,27 +42,33 @@ class EditorState extends State {
 	var scrollPosition:FlxPoint = new FlxPoint(0, 0);
 	var selectedTilePosition:FlxPoint = new FlxPoint(0, 0);
 
+	var types:Array<String> = [];
+	var selectedType:Int = 0;
+
 	override public function create():Void {
 		super.create();
 		bgColor = 0xff8f9aff;
+
+		selectedTile = new Tile(0, 0, levelInfo.scale + 0.1);
+		selectedTile.alpha = 0.4;
+		types = selectedTile.anims;
 
 		FlxG.mouse.visible = true;
 		FlxG.mouse.useSystemCursor = true;
 
 		tileSize = 16 * levelInfo.scale;
 
-		selectedTile = new Tile(0, 0, levelInfo.scale);
-		selectedTile.alpha = 0.4;
-		add(selectedTile);
-
 		FlxG.watch.add(FlxG.camera, 'zoom', 'zoom');
 		FlxG.watch.add(scrollPosition, 'x', 'scrollX');
 		FlxG.watch.add(scrollPosition, 'y', 'scrollY');
 		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
 		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
+		FlxG.watch.add(FlxG.mouse,'wheel', 'mouseScroll');
 
 		tiles = new TileGroup(levelInfo);
-		add(tiles);
+		add(selectedTile);
+		insert(members.indexOf(selectedTile)+1, tiles);
+		
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -103,6 +109,12 @@ class EditorState extends State {
 
 		var x:Int = Std.int(selectedTilePosition.x);
 		var y:Int = Std.int(FlxG.height / tileSize - selectedTilePosition.y) - 1;
+
+		var mouseMoveInThisFrame:Int = Std.int(Util.clamp(FlxG.mouse.wheel, -1, 1));
+		selectedType += mouseMoveInThisFrame;
+		selectedType = selectedType % types.length;
+		selectedTile.changeType(types[selectedType]);
+
 		if (FlxG.mouse.pressed) {
 			var nextId:Int = levelInfo.tiles[levelInfo.tiles.length - 1].id + 1;
 			if (tiles.isTileOccupied(x, y))
