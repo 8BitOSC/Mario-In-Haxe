@@ -49,8 +49,7 @@ class EditorState extends State {
 		var y:Float = Math.floor(FlxG.mouse.y / tileSize) * tileSize;
 		var w:Float = tileSize;
 		x += w / 2;
-		var subVal:Int = 6;
-		x -= subVal;
+		x -= 6;
 		selectedTile.x = x;
 		selectedTile.y = y;
 		var up:Bool = FlxG.keys.pressed.A || FlxG.keys.pressed.UP;
