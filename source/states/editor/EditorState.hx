@@ -29,10 +29,6 @@ class EditorState extends State {
 
 		tileSize = 16 * levelInfo.scale;
 
-		selectedTile = new Tile(0, 0, levelInfo.scale);
-		selectedTile.alpha = 0.4;
-		add(selectedTile);
-
 		FlxG.watch.add(FlxG.camera, 'zoom', 'zoom');
 		FlxG.watch.add(FlxG.camera.scroll, 'x', 'scrollX');
 		FlxG.watch.add(FlxG.camera.scroll, 'y', 'scrollY');
@@ -41,6 +37,10 @@ class EditorState extends State {
 
 		tiles = new TileGroup(levelInfo);
 		add(tiles);
+
+		selectedTile = new Tile(0, 0, levelInfo.scale);
+		selectedTile.alpha = 0.4;
+		add(selectedTile);
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -51,8 +51,6 @@ class EditorState extends State {
 		x += w / 2;
 		var subVal:Int = 6;
 		x -= subVal;
-		y -= w / 2;
-		y += subVal;
 		selectedTile.x = x;
 		selectedTile.y = y;
 		var up:Bool = FlxG.keys.pressed.A || FlxG.keys.pressed.UP;
