@@ -27,7 +27,6 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		super(0);
 		for (t in data.tiles) {
 			addNewTile(data,t);
-			add(new Tile(x, FlxG.height - y, data.scale, data.theme, t.type));
 		}
 	}
 
