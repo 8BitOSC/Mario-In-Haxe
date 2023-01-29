@@ -113,7 +113,10 @@ class EditorState extends State {
 
 		var mouseMoveInThisFrame:Int = Std.int(Util.clamp(FlxG.mouse.wheel, -1, 1));
 		selectedType += mouseMoveInThisFrame;
-		selectedType = selectedType % types.length;
+		if (selectedType < 0)
+			selectedType = types.length - 1;
+		if (selectedType >= types.length)
+			selectedType = 0;
 		selectedTile.changeType(types[selectedType]);
 
 		if (FlxG.mouse.pressed) {
