@@ -65,9 +65,7 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		var toReturn = false;
 		for (t in this.members) {
 			if(t == null) continue;
-			trace(new FlxPoint(x,y));
-			trace(t.actualPosition);
-			if (t.x == x && t.y == y) {
+			if (t.actualPosition.x == x && t.actualPosition.y == y) {
 				toReturn = true;
 			}
 		}
@@ -78,8 +76,8 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		var w:Float = 16 * data.scale;
 		var x:Float = (t.x) * w;
 		var y:Float = (t.y) * w;
-		var origX:Float = x;
-		var origY:Float = y;
+		var origX:Float = t.x;
+		var origY:Float = t.y;
 		x += w / 2;
 		var subVal:Int = 6;
 		x -= subVal;
