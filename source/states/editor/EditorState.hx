@@ -126,7 +126,7 @@ class EditorState extends State {
 			var t:TileMeta = {
 				x: x,
 				y: y,
-				type: 'ground',
+				type: types[selectedType],
 				id: nextId
 			};
 			levelInfo.tiles.push(t);

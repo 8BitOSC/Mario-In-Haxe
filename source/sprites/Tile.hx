@@ -20,7 +20,7 @@ class Tile extends FlxSprite {
 		animMap.set('ground', 0);
 		animMap.set('brick', 1);
 		animMap.set('block', 3);
-		animMap.set('hardBlock', 9);
+		animMap.set('hardBlock', 8);
 
 		for(k in animMap.keys()) {
 			anims.push(k);
