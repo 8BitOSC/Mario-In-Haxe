@@ -24,9 +24,6 @@ class EditorState extends State {
 		super.create();
 		bgColor = 0xff8f9aff;
 
-		FlxG.resizeWindow(796,448);
-		FlxG.resizeGame(796,448);
-
 		FlxG.mouse.visible = true;
 		FlxG.mouse.useSystemCursor = true;
 
@@ -48,8 +45,8 @@ class EditorState extends State {
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-		selectedTile.x = FlxG.mouse.x;
-		selectedTile.y = FlxG.mouse.y;
+		selectedTile.x = FlxG.mouse.x/16;
+		selectedTile.y = FlxG.mouse.y/16;
 		if (FlxG.keys.pressed.UP)
 			FlxG.camera.zoom += 0.01;
 		if (FlxG.keys.pressed.DOWN)
