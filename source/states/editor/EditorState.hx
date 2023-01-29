@@ -8,22 +8,22 @@ import states.State;
 import flixel.FlxSprite;
 import sprites.TileGroup;
 import flixel.group.FlxGroup;
+import flixel.util.FlxColor;
+import flixel.util.FlxTimer;
 
 class EditorState extends State {
 	var selectedTile:Tile = null;
 
 	var levelInfo:LevelMeta = {
-		tiles: [for (i in 0...50) {x: i, y: 0, type: 'ground'}].concat([for (i in 0...50) {x: i, y: 1, type: 'ground'}])
-			.concat([for (i in 0...50) {x: i, y: 2, type: 'ground'}]),
+		tiles: [for (i in 0...50) {x: i, y: 0, type: 'ground'}].concat([for (i in 0...50) {x: i, y: 1, type: 'ground'}]),
 		theme: "ground",
 		scale: 2
 	}
 
-	var uiGroup:FlxGroup = new FlxGroup();
-
 	var tileSize:Float = 16;
 
-	var tiles = null;
+	var tiles:TileGroup = null;
+	var uiGroup:FlxGroup = null;
 
 	override public function create():Void {
 		super.create();
@@ -33,6 +33,10 @@ class EditorState extends State {
 		FlxG.mouse.useSystemCursor = true;
 
 		tileSize = 16 * levelInfo.scale;
+
+		tiles = new TileGroup(levelInfo);
+
+		uiGroup = new FlxGroup(0);
 
 		selectedTile = new Tile(0, 0, levelInfo.scale);
 		selectedTile.alpha = 0.4;
@@ -44,8 +48,7 @@ class EditorState extends State {
 		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
 		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
 
-		tiles = new TileGroup(levelInfo);
-		add(tiles);
+		trace('WOW');
 		add(uiGroup);
 	}
 
