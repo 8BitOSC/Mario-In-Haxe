@@ -21,7 +21,7 @@ class EditorState extends State {
 		bgColor = 0xff8f9aff;
 
 		FlxG.mouse.visible = true;
-		FlxG.mouse.unload();
+		FlxG.mouse.useSystemCursor = true;
 		
 		selectedTile = new Tile(0,0,levelInfo.scale);
 		selectedTile.alpha = 0.4;
