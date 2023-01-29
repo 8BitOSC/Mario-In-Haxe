@@ -23,11 +23,10 @@ class EditorState extends State {
 	var tileSize:Float = 16;
 
 	var tiles:TileGroup = null;
-	var uiGroup:FlxGroup = null;
 
 	override public function create():Void {
 		super.create();
-		bgColor = 0xff8f9aff;
+		// bgColor = 0xff8f9aff;
 
 		FlxG.mouse.visible = true;
 		FlxG.mouse.useSystemCursor = true;
@@ -38,9 +37,10 @@ class EditorState extends State {
 
 		uiGroup = new FlxGroup(0);
 
+		add(tiles);
+
 		selectedTile = new Tile(0, 0, levelInfo.scale);
 		selectedTile.alpha = 0.4;
-		uiGroup.add(selectedTile);
 
 		FlxG.watch.add(FlxG.camera, 'zoom', 'zoom');
 		FlxG.watch.add(FlxG.camera.scroll, 'x', 'scrollX');
@@ -48,8 +48,7 @@ class EditorState extends State {
 		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
 		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
 
-		trace('WOW');
-		add(uiGroup);
+		add(selectedTile);
 	}
 
 	override public function update(elapsed:Float):Void {
