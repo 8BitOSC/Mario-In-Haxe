@@ -45,21 +45,27 @@ class EditorState extends State {
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-		selectedTile.x = FlxG.mouse.x/16;
-		selectedTile.y = FlxG.mouse.y/16;
-		if (FlxG.keys.pressed.UP)
-			FlxG.camera.zoom += 0.01;
-		if (FlxG.keys.pressed.DOWN)
-			FlxG.camera.zoom -= 0.01;
-		if (FlxG.keys.pressed.A)
-			FlxG.camera.scroll.x -= 2;
-		if (FlxG.keys.pressed.D)
-			FlxG.camera.scroll.x += 2;
-		if (FlxG.keys.pressed.W)
-			FlxG.camera.scroll.y -= 2;
-		if (FlxG.keys.pressed.S)
-			FlxG.camera.scroll.y += 2;
-		if (FlxG.keys.justPressed.R)
-			FlxG.resetState();
+		var x:Float = Math.floor(FlxG.mouse.x / tileSize) * tileSize;
+		var y:Float = Math.floor(FlxG.mouse.y / tileSize) * tileSize;
+		var w:Float = tileSize;
+		x += w / 2;
+		var subVal:Int = 6;
+		x -= subVal;
+		y -= w / 2;
+		y += subVal;
+		selectedTile.x = x;
+		selectedTile.y = y;
+		var up:Bool = FlxG.keys.pressed.A || FlxG.keys.pressed.UP;
+		var down:Bool = FlxG.keys.pressed.D || FlxG.keys.pressed.DOWN;
+		var left:Bool = FlxG.keys.pressed.W || FlxG.keys.pressed.LEFT;
+		var right:Bool = FlxG.keys.pressed.S || FlxG.keys.pressed.RIGHT;
+		if (left)
+			FlxG.camera.scroll.x -= 4;
+		if (right)
+			FlxG.camera.scroll.x += 4;
+		if (up)
+			FlxG.camera.scroll.y -= 4;
+		if (down)
+			FlxG.camera.scroll.y += 4;
 	}
 }
