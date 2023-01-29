@@ -1,5 +1,6 @@
-package states;
+package states.editor;
 
+import sprites.Tile;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
@@ -7,46 +8,44 @@ import states.State;
 import flixel.FlxSprite;
 import sprites.TileGroup;
 
-class TestState extends State {
-	var bg:FlxSprite = null;
-	var user:String = '';
+class EditorState extends State {
+	var selectedTile:Tile = null;
 
+	var levelInfo:LevelMeta = {
+		tiles: [],
+		theme: "ground",
+		scale: 2
+	}
 	override public function create():Void {
 		super.create();
+		bgColor = 0xff8f9aff;
 
-		var scaleVal:Float = 2;
-		bg = FlxGridOverlay.create(20, 20, Math.floor(FlxG.width * scaleVal), Math.floor(FlxG.height * scaleVal), true, 0xffff9500, 0xffffe4a4);
-		bg.x = 1;
-		bg.y = 1;
+		FlxG.mouse.visible = true;
+		FlxG.mouse.unload();
+		
+		selectedTile = new Tile(0,0,levelInfo.scale);
+		selectedTile.alpha = 0.4;
+		add(selectedTile);
 
-		add(bg);
-		// x, y, width, height, camera width, camera height, camera zoom, camera scroll x, camera scroll y
-		FlxG.watch.add(bg, 'x', 'x');
-		FlxG.watch.add(bg, 'y', 'y');
-		FlxG.watch.add(bg, 'width', 'width');
-		FlxG.watch.add(bg, 'height', 'height');
 		FlxG.watch.add(FlxG.camera, 'zoom', 'zoom');
 		FlxG.watch.add(FlxG.camera.scroll, 'x', 'scrollX');
 		FlxG.watch.add(FlxG.camera.scroll, 'y', 'scrollY');
 		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
 		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
 
-
-		var block = new TileGroup({tiles: [for (i in 0...250) {x: i, y: 0, type: 'ground'}], theme: "ground", scale: 2});
+		var block = new TileGroup({
+			tiles: [for (i in 0...50) {x: i, y: 0, type: 'ground'}].concat([for (i in 0...50) {x: i, y: 1, type: 'ground'}])
+				.concat([for (i in 0...50) {x: i, y: 2, type: 'ground'}]),
+			theme: "ground",
+			scale: 2
+		});
 		add(block);
 	}
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
-		if (bg != null) {
-			var move:Float = 1;
-			bg.x += move;
-			bg.y += move;
-			// if (bg.x >= 0)
-			//	bg.x = -200;
-			// if (bg.y >= 0)
-			//	bg.y = -200;
-		}
+		selectedTile.x = FlxG.mouse.x;
+		selectedTile.y = FlxG.mouse.y;
 		if (FlxG.keys.pressed.UP)
 			FlxG.camera.zoom += 0.01;
 		if (FlxG.keys.pressed.DOWN)

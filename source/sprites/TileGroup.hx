@@ -26,18 +26,21 @@ class TileGroup extends FlxTypedGroup<Tile> {
 	override public function new(data:LevelMeta) {
 		super(0);
 		for (t in data.tiles) {
-			var w:Float = 16 * data.scale;
-			var x:Float = (t.x) * w;
-			var y:Float = (t.y) * w;
-			x += w / 2;
-			var subVal:Int = 6;
-			x -= subVal;
-			y += w / 2;
-			y += subVal;
+			addNewTile(data,t);
 			add(new Tile(x, FlxG.height - y, data.scale, data.theme, t.type));
-			FlxG.log.add(x);
-			FlxG.log.add(FlxG.height - y);
 		}
+	}
+
+	function addNewTile(data:LevelMeta, t:TileMeta) {
+		var w:Float = 16 * data.scale;
+		var x:Float = (t.x) * w;
+		var y:Float = (t.y) * w;
+		x += w / 2;
+		var subVal:Int = 6;
+		x -= subVal;
+		y += w / 2;
+		y += subVal;
+		add(new Tile(x, FlxG.height - y, data.scale, data.theme, t.type));
 	}
 
 	override public function draw():Void {
@@ -70,7 +73,7 @@ class TileGroup extends FlxTypedGroup<Tile> {
 				// x is less than FlxG.width
 				// y is greater than cameraBounds min y
 				// y is less than FlxG.height
-				doWeDraw = doWeDraw && (x > cameraBounds.min.x && x < FlxG.width && y > cameraBounds.min.y && y < FlxG.height);
+				doWeDraw = doWeDraw && (x+w*1.5 > cameraBounds.min.x && x-w*1.5 < cameraBounds.max.x && y+h > cameraBounds.min.y && y < FlxG.height);
 				if (doWeDraw) {
 					spr.draw();
 				}

@@ -19,8 +19,6 @@ class Util {
 		var height:Int = Std.int(FlxG.height / camera.zoom);
 		var min:FlxPoint = camera.scroll;
         var max:FlxPoint = new FlxPoint(min.x + width, min.y + height);
-        var width:Int = Std.int(max.x - min.x);
-        var height:Int = Std.int(max.y - min.y);
         return {min: min, max: max, width: width, height: height};
 	}
 }
