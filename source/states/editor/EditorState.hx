@@ -35,8 +35,6 @@ class EditorState extends State {
 
 		tiles = new TileGroup(levelInfo);
 
-		uiGroup = new FlxGroup(0);
-
 		add(tiles);
 
 		selectedTile = new Tile(0, 0, levelInfo.scale);
