@@ -1,5 +1,6 @@
 package states.editor;
 
+#if desktop
 import flixel.group.FlxGroup;
 import sprites.Tile;
 import flixel.FlxG;
@@ -8,6 +9,7 @@ import flixel.addons.display.FlxGridOverlay;
 import states.State;
 import flixel.FlxSprite;
 import sprites.TileGroup;
+import flixel.math.FlxPoint;
 
 class EditorState extends State {
 	var tiles:TileGroup = null;
@@ -48,17 +50,17 @@ class EditorState extends State {
 		super.update(elapsed);
 		var x:Float = Math.floor(FlxG.mouse.x / tileSize) * tileSize;
 		var y:Float = Math.floor(FlxG.mouse.y / tileSize) * tileSize;
-		var w:Float = tileSize;
-		x += w / 2;
+		x += tileSize / 2;
 		var subVal:Int = 7;
 		x -= subVal;
 		y -= subVal;
+		y += tileSize / 2;
 		selectedTile.x = x;
 		selectedTile.y = y;
-		var up:Bool = FlxG.keys.pressed.A || FlxG.keys.pressed.UP;
-		var down:Bool = FlxG.keys.pressed.D || FlxG.keys.pressed.DOWN;
-		var left:Bool = FlxG.keys.pressed.W || FlxG.keys.pressed.LEFT;
-		var right:Bool = FlxG.keys.pressed.S || FlxG.keys.pressed.RIGHT;
+		var up:Bool = FlxG.keys.pressed.W || FlxG.keys.pressed.UP;
+		var down:Bool = FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN;
+		var left:Bool = FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT;
+		var right:Bool = FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT;
 		if (left)
 			FlxG.camera.scroll.x -= 4;
 		if (right)
@@ -69,3 +71,4 @@ class EditorState extends State {
 			FlxG.camera.scroll.y += 4;
 	}
 }
+#end
