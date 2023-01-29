@@ -63,8 +63,6 @@ class EditorState extends State {
 
 		tiles = new TileGroup(levelInfo);
 		add(tiles);
-
-		tiles.destroyTile(0);
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -93,23 +91,21 @@ class EditorState extends State {
 		if (down)
 			FlxG.camera.scroll.y += 4;
 
-		scrollPosition.x = Math.floor(FlxG.camera.scroll.x); /// tileSize);
-		scrollPosition.y = Math.floor(FlxG.camera.scroll.y); // / tileSize);
+		scrollPosition.x = Math.floor(FlxG.camera.scroll.x);
+		scrollPosition.y = Math.floor(FlxG.camera.scroll.y);
 		if (scrollPosition.x < 0)
 			scrollPosition.x = 0;
-		if (scrollPosition.y < 0)
+		if (scrollPosition.y > 0)
 			scrollPosition.y = 0;
 
 		FlxG.camera.scroll.x = scrollPosition.x;
 		FlxG.camera.scroll.y = scrollPosition.y;
 
+		var x:Int = Std.int(selectedTilePosition.x);
+		var y:Int = Std.int(FlxG.height / tileSize - selectedTilePosition.y) - 1;
 		if (FlxG.mouse.pressed) {
 			var nextId:Int = levelInfo.tiles[levelInfo.tiles.length - 1].id + 1;
-			var x:Int = Std.int(selectedTilePosition.x);
-			var y:Int = Std.int(FlxG.height / tileSize - selectedTilePosition.y)-1;
-			trace(new FlxPoint(x, y));
-			trace(tiles.isTileOccupied(x, y));
-			if(tiles.isTileOccupied(x, y))
+			if (tiles.isTileOccupied(x, y))
 				return;
 			var t:TileMeta = {
 				x: x,
@@ -119,6 +115,9 @@ class EditorState extends State {
 			};
 			levelInfo.tiles.push(t);
 			tiles.addNewTile(levelInfo, t);
+		}
+		if (FlxG.mouse.pressedRight) {
+			tiles.destroyTileAtPos(x, y);
 		}
 	}
 }

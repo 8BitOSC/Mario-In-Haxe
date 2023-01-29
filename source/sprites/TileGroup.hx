@@ -33,8 +33,6 @@ class TileGroup extends FlxTypedGroup<Tile> {
 
 	public function searchForTile(id:Int, ?callback:Tile->Void):Tile {
 		id += 1;
-		trace(this.members);
-		trace(callback);
 		for (t in this.members) {
 			if(t == null) continue;
 			if (t.id == id) {
@@ -47,18 +45,37 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		return null;
 	}
 
-	public function destroyTile(id:Int):Void {
-		searchForTile(id, function(t:Tile) {
-			var oldId:Int = t.id;
-			this.remove(t);
-			t.destroy();
-			for (i in this.members) {
-				if(Reflect.field(i, 'id') == null) continue;
-				if (i.id > oldId) {
-					i.id -= 1;
+	public function searchForTileAtPos(x:Int, y:Int, ?callback:Tile->Void):Tile {
+		for (t in this.members) {
+			if(t == null) continue;
+			if (t.actualPosition.x == x && t.actualPosition.y == y) {
+				if (callback != null) {
+					callback(t);
 				}
+				return t;
 			}
-		});
+		}
+		return null;
+	}
+
+	private function destroyCallback(t:Tile) {
+		var oldId:Int = t.id;
+		this.remove(t);
+		t.destroy();
+		for (i in this.members) {
+			if(Reflect.field(i, 'id') == null) continue;
+			if (i.id > oldId) {
+				i.id -= 1;
+			}
+		}
+	}
+
+	public function destroyTile(id:Int):Void {
+		searchForTile(id, destroyCallback);
+	}
+
+	public function destroyTileAtPos(x:Int, y:Int):Void {
+		searchForTileAtPos(x, y, destroyCallback);
 	}
 
 	public function isTileOccupied(x:Int,y:Int):Bool{
