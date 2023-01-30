@@ -14,7 +14,7 @@ typedef Log = {
 
 class Main extends Sprite {
 	var gameWidth:Int = 512; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
-	var gameHeight:Int = 448; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
+	var gameHeight:Int = 480; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	var initialState:Class<FlxState> = states.editor.EditorState; // The FlxState the game starts with.
 	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.

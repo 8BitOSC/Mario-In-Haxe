@@ -1,6 +1,6 @@
 package states.editor;
 
-#if desktop
+import sprites.Mario;
 import flixel.group.FlxGroup;
 import sprites.Tile;
 import flixel.FlxG;
@@ -15,6 +15,8 @@ import tools.Util;
 class EditorState extends State {
 	var tiles:TileGroup = null;
 	var selectedTile:Tile = null;
+	var marioSpawn:MarioSpawn = null;
+	var selectedMarioSpawn:MarioSpawn = null;
 
 	var levelInfo:LevelMeta = {
 		tiles: [
@@ -34,6 +36,10 @@ class EditorState extends State {
 					id: i + 4
 				}
 			]),
+		spawn: {
+			x: 1,
+			y: 2
+		},
 		theme: "ground",
 		scale: 2
 	}
@@ -52,7 +58,13 @@ class EditorState extends State {
 
 		selectedTile = new Tile(0, 0, levelInfo.scale + 0.1);
 		selectedTile.alpha = 0.4;
+
+		selectedMarioSpawn = new MarioSpawn(0, 0, levelInfo.scale + 0.1);
+		selectedMarioSpawn.alpha = 0.4;
+
 		types = selectedTile.anims;
+		types.reverse();
+		types.push('spawn');
 
 		FlxG.mouse.visible = true;
 		FlxG.mouse.useSystemCursor = true;
@@ -64,12 +76,14 @@ class EditorState extends State {
 		FlxG.watch.add(scrollPosition, 'y', 'scrollY');
 		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
 		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
-		FlxG.watch.add(FlxG.mouse,'wheel', 'mouseScroll');
+		FlxG.watch.add(FlxG.mouse, 'wheel', 'mouseScroll');
 
 		tiles = new TileGroup(levelInfo);
 		add(selectedTile);
-		insert(members.indexOf(selectedTile)+1, tiles);
-		
+		add(selectedMarioSpawn);
+		marioSpawn = new MarioSpawn(levelInfo.spawn.x, levelInfo.spawn.y, levelInfo.scale);
+		add(marioSpawn);
+		add(tiles);
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -85,6 +99,8 @@ class EditorState extends State {
 		y += tileSize / 2;
 		selectedTile.x = x;
 		selectedTile.y = y;
+		selectedMarioSpawn.x = x;
+		selectedMarioSpawn.y = y;
 		var up:Bool = FlxG.keys.pressed.W || FlxG.keys.pressed.UP;
 		var down:Bool = FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN;
 		var left:Bool = FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT;
@@ -117,9 +133,22 @@ class EditorState extends State {
 			selectedType = types.length - 1;
 		if (selectedType >= types.length)
 			selectedType = 0;
-		selectedTile.changeType(types[selectedType]);
+		if (types[selectedType] == 'spawn') {
+			selectedTile.visible = false;
+			selectedMarioSpawn.visible = true;
+		} else {
+			selectedTile.visible = true;
+			selectedMarioSpawn.visible = false;
+			selectedTile.changeType(types[selectedType]);
+		}
 
 		if (FlxG.mouse.pressed) {
+			if (types[selectedType] == 'spawn') {
+				levelInfo.spawn.x = x;
+				levelInfo.spawn.y = y;
+				marioSpawn.changePosition(x, y);
+				return;
+			}
 			var nextId:Int = levelInfo.tiles[levelInfo.tiles.length - 1].id + 1;
 			if (tiles.isTileOccupied(x, y))
 				return;
@@ -137,4 +166,28 @@ class EditorState extends State {
 		}
 	}
 }
-#end
+
+class MarioSpawn extends FlxSprite {
+	public function new(xPos:Float, yPos:Float, scale:Float) {
+		super(0, 0);
+		loadGraphic("assets/images/mario/small.png", true, 17, 18);
+		animation.add("idle", [0]);
+		animation.play("idle");
+		this.scale.set(scale, scale);
+		changePosition(xPos, yPos);
+	}
+
+	public function changePosition(xPos:Float, yPos:Float):FlxPoint {
+		var w:Float = 17 * this.scale.x;
+		var x:Float = (xPos) * w;
+		var y:Float = (yPos) * w;
+		x += w / 2;
+		var subVal:Int = 6;
+		x -= subVal;
+		y += w / 2;
+		y += subVal;
+		this.x = x;
+		this.y = FlxG.height - y;
+		return new FlxPoint(this.x, this.y);
+	}
+}

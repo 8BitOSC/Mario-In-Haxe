@@ -10,6 +10,11 @@ import flixel.FlxCamera;
 import flixel.FlxObject;
 import tools.Util;
 
+typedef Spawn = {
+	x:Int,
+	y:Int
+}
+
 typedef TileMeta = {
 	x:Int,
 	y:Int,
@@ -19,6 +24,7 @@ typedef TileMeta = {
 
 typedef LevelMeta = {
 	tiles:Array<TileMeta>,
+	spawn:Spawn,
 	theme:String,
 	scale:Int
 }
