@@ -6,13 +6,13 @@ import sprites.Tile;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
-import states.State;
+import flixel.FlxState;
 import flixel.FlxSprite;
 import sprites.TileGroup;
 import flixel.math.FlxPoint;
 import tools.Util;
 
-class EditorState extends State {
+class EditorState extends FlxState {
 	var tiles:TileGroup = null;
 	var selectedTile:Tile = null;
 	var marioSpawn:MarioSpawn = null;
@@ -79,11 +79,11 @@ class EditorState extends State {
 		FlxG.watch.add(FlxG.mouse, 'wheel', 'mouseScroll');
 
 		tiles = new TileGroup(levelInfo);
-		add(selectedTile);
 		add(selectedMarioSpawn);
 		marioSpawn = new MarioSpawn(levelInfo.spawn.x, levelInfo.spawn.y, levelInfo.scale);
 		add(marioSpawn);
 		add(tiles);
+		add(selectedTile);
 	}
 
 	override public function update(elapsed:Float):Void {

@@ -13,6 +13,18 @@ class Tile extends FlxSprite {
 	public var anims:Array<String> = [];
 	public var type:String = 'ground';
 	public var isSolid:Bool = true;
+
+	/**
+	 * creates a new tile
+	 * @param x x position
+	 * @param y y position
+	 * @param scale scaling of the tile
+	 * @param level the image to grab (e.g. ground = assets/images/tiles/ground/blocks.png)
+	 * @param type the type of tile (e.g. ground, brick, block, hardBlock)
+	 * @param id the id of the tile
+	 * @param actualX the actual x position of the tile, as x is offset
+	 * @param actualY the actual y position of the tile, as y is offset
+	 */
 	override public function new(x:Float = 0, y:Float = 0, scale:Float = 5, level:String = 'ground', type:String = 'ground',id:Int = -1,actualX:Float = 0,actualY:Float = 0) {
 		this.id = id;
 		this.actualPosition = new FlxPoint(actualX,actualY);

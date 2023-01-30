@@ -30,6 +30,11 @@ typedef LevelMeta = {
 }
 
 class TileGroup extends FlxTypedGroup<Tile> {
+
+	/**
+	 * creates a new group of tiles from a level meta object
+	 * @param data the array of tiles to use
+	 */
 	override public function new(data:LevelMeta) {
 		super(0);
 		for (t in data.tiles) {
@@ -37,6 +42,12 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		}
 	}
 
+	/**
+	 * searches for a tile with the given id and returns it
+	 * @param id the id of the tile to search for
+	 * @param callback a callback to run on the tile if it is found
+	 * @return Tile
+	 */
 	public function searchForTile(id:Int, ?callback:Tile->Void):Tile {
 		id += 1;
 		for (t in this.members) {
@@ -51,6 +62,13 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		return null;
 	}
 
+	/**
+	 * searches for a tile at the given position and returns it
+	 * @param x the x position to search for
+	 * @param y the y position to search for
+	 * @param callback a callback to run on the tile if it is found
+	 * @return Tile
+	 */
 	public function searchForTileAtPos(x:Int, y:Int, ?callback:Tile->Void):Tile {
 		for (t in this.members) {
 			if(t == null) continue;
@@ -64,6 +82,10 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		return null;
 	}
 
+	/**
+	 * an internal callback used in destroy functions
+	 * @param t the tile to destroy
+	 */
 	private function destroyCallback(t:Tile) {
 		var oldId:Int = t.id;
 		this.remove(t);
@@ -76,14 +98,29 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		}
 	}
 
+	/**
+	 * destroys a tile with the given id
+	 * @param id the id of the tile to destroy
+	 */
 	public function destroyTile(id:Int):Void {
 		searchForTile(id, destroyCallback);
 	}
 
+	/**
+	 * destroys a tile at the given position
+	 * @param x the x position of the tile to destroy
+	 * @param y the y position of the tile to destroy
+	 */
 	public function destroyTileAtPos(x:Int, y:Int):Void {
 		searchForTileAtPos(x, y, destroyCallback);
 	}
 
+	/**
+	 * checks if a tile is occupied at the given position
+	 * @param x the x position to check
+	 * @param y the y position to check
+	 * @return Bool
+	 */
 	public function isTileOccupied(x:Int,y:Int):Bool{
 		var toReturn = false;
 		for (t in this.members) {
@@ -95,6 +132,11 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		return toReturn;
 	}
 
+	/**
+	 * adds a new tile to the group
+	 * @param data the level meta object, used for scale and theme
+	 * @param t the tile meta object
+	 */
 	public function addNewTile(data:LevelMeta, t:TileMeta) {
 		var w:Float = 16 * data.scale;
 		var x:Float = (t.x) * w;
@@ -107,46 +149,5 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		y += w / 2;
 		y += subVal;
 		add(new Tile(x, FlxG.height - y, data.scale, data.theme, t.type, t.id,origX,origY));
-	}
-
-	override public function draw():Void {
-		var cameraBounds = Util.getCameraBounds();
-		@:privateAccess {
-			var oldDefaultCameras = FlxCamera._defaultCameras;
-			if (cameras != null) {
-				FlxCamera._defaultCameras = cameras;
-			}
-
-			for (spr in members) {
-				var doWeDraw:Bool = (spr != null && spr.exists && spr.visible);
-				var x:Float = Reflect.field(spr, 'x');
-				var y:Float = Reflect.field(spr, 'y');
-				var w:Float = Reflect.field(spr, 'width');
-				var h:Float = Reflect.field(spr, 'height');
-				// trace(x);
-				// trace(y);
-				// trace(cameraBounds);
-				// doWeDraw = if do we draw and the following:
-				// x is greater than the camera bounds min x
-				// x is less than the camera bounds max x
-				// y is greater than the camera bounds min y
-				// y is less than the camera bounds max y
-				// width/height is added to x/y before calculations
-				x += w;
-				y += h;
-				// doWeDraw = doWeDraw && (x > cameraBounds.min.x && x < cameraBounds.max.x && y > cameraBounds.min.y && y < cameraBounds.max.y);
-				// doWeDraw = dowedraw and x is greater than cameraBounds min x
-				// x is less than FlxG.width
-				// y is greater than cameraBounds min y
-				// y is less than FlxG.height
-				doWeDraw = doWeDraw
-					&& (x + w * 1.5 > cameraBounds.min.x && x - w * 1.5 < cameraBounds.max.x && y + h > cameraBounds.min.y && y < FlxG.height);
-				if (doWeDraw) {
-					spr.draw();
-				}
-			}
-
-			FlxCamera._defaultCameras = oldDefaultCameras;
-		}
 	}
 }
