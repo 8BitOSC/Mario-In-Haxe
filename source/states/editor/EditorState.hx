@@ -79,10 +79,11 @@ class EditorState extends FlxState {
 		FlxG.watch.add(FlxG.mouse, 'wheel', 'mouseScroll');
 
 		tiles = new TileGroup(levelInfo);
-		add(selectedMarioSpawn);
 		marioSpawn = new MarioSpawn(levelInfo.spawn.x, levelInfo.spawn.y, levelInfo.scale);
-		add(marioSpawn);
+
 		add(tiles);
+		add(marioSpawn);
+		add(selectedMarioSpawn);
 		add(selectedTile);
 	}
 
