@@ -6,13 +6,15 @@ import sprites.Tile;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
-import flixel.FlxState;
+import states.State;
 import flixel.FlxSprite;
 import sprites.TileGroup;
 import flixel.math.FlxPoint;
 import tools.Util;
+import flixel.text.FlxText;
+import flixel.addons.ui.FlxUIButton;
 
-class EditorState extends FlxState {
+class EditorState extends State {
 	var tiles:TileGroup = null;
 	var selectedTile:Tile = null;
 	var marioSpawn:MarioSpawn = null;
@@ -77,6 +79,7 @@ class EditorState extends FlxState {
 		FlxG.watch.add(cameraBounds, 'width', 'cameraWidth');
 		FlxG.watch.add(cameraBounds, 'height', 'cameraHeight');
 		FlxG.watch.add(FlxG.mouse, 'wheel', 'mouseScroll');
+		FlxG.watch.addMouse();
 
 		tiles = new TileGroup(levelInfo);
 		marioSpawn = new MarioSpawn(levelInfo.spawn.x, levelInfo.spawn.y, levelInfo.scale);
@@ -141,6 +144,10 @@ class EditorState extends FlxState {
 			selectedTile.visible = true;
 			selectedMarioSpawn.visible = false;
 			selectedTile.changeType(types[selectedType]);
+		}
+
+		if(FlxG.keys.justPressed.CONTROL && FlxG.keys.justPressed.S) {
+			var json:String = haxe.Json.stringify(levelInfo);
 		}
 
 		if (FlxG.mouse.pressed) {
