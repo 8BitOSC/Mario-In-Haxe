@@ -1,13 +1,12 @@
 package sprites;
 
+import flixel.util.FlxCollision;
 import flixel.math.FlxPoint;
 import sprites.Tile;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxG;
-import flixel.FlxBasic;
 import flixel.FlxG;
-import flixel.FlxCamera;
-import flixel.FlxObject;
+import flixel.FlxSprite;
 import tools.Util;
 
 typedef Spawn = {
@@ -149,5 +148,20 @@ class TileGroup extends FlxTypedGroup<Tile> {
 		y += w / 2;
 		y += subVal;
 		add(new Tile(x, FlxG.height - y, data.scale, data.theme, t.type, t.id,origX,origY));
+	}
+
+	/**
+	 * check if the tiles collide with a sprite
+	 * @param sprite the sprite to check
+	 * @return Bool
+	 */
+
+	public function collidesWith(sprite:FlxSprite):Bool{
+		for(t in this.members){
+			if(FlxCollision.pixelPerfectCheck(t,sprite)){
+				return true;
+			}
+		}
+		return false;
 	}
 }

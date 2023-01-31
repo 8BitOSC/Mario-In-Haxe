@@ -47,7 +47,7 @@ class Mario extends FlxSprite {
         }
         this.vel.y -= (5*elapsed);
         this.y -= this.vel.y;
-        if(FlxCollision.pixelPerfectCheck(this,PlayState.tiles)){
+        if(PlayState.tiles.collidesWith(this)){
             this.y += this.vel.y;
             this.vel.y = 0;
         }
