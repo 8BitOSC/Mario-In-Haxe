@@ -6,7 +6,6 @@ import sprites.Tile;
 import flixel.FlxG;
 import flixel.FlxState;
 import flixel.addons.display.FlxGridOverlay;
-import states.State;
 import flixel.FlxSprite;
 import sprites.TileGroup;
 import flixel.math.FlxPoint;
@@ -14,7 +13,7 @@ import tools.Util;
 import flixel.text.FlxText;
 import flixel.addons.ui.FlxUIButton;
 
-class EditorState extends State {
+class EditorState extends FlxState {
 	var tiles:TileGroup = null;
 	var selectedTile:Tile = null;
 	var marioSpawn:MarioSpawn = null;
@@ -54,6 +53,8 @@ class EditorState extends State {
 	var types:Array<String> = [];
 	var selectedType:Int = 0;
 
+	var cameraBounds:MinAndMax = Util.getCameraBounds();
+
 	override public function create():Void {
 		super.create();
 		bgColor = 0xff8f9aff;
@@ -61,7 +62,7 @@ class EditorState extends State {
 		selectedTile = new Tile(0, 0, levelInfo.scale + 0.1);
 		selectedTile.alpha = 0.4;
 
-		selectedMarioSpawn = new MarioSpawn(0, 0, levelInfo.scale + 0.1);
+		selectedMarioSpawn = new MarioSpawn(0, 0, levelInfo.scale);
 		selectedMarioSpawn.alpha = 0.4;
 
 		types = selectedTile.anims;
@@ -92,6 +93,7 @@ class EditorState extends State {
 
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
+		cameraBounds = Util.getCameraBounds();
 		var x:Float = Math.floor(FlxG.mouse.x / tileSize) * tileSize;
 		var y:Float = Math.floor(FlxG.mouse.y / tileSize) * tileSize;
 		selectedTilePosition.x = x / tileSize;
@@ -133,6 +135,10 @@ class EditorState extends State {
 
 		var mouseMoveInThisFrame:Int = Std.int(Util.clamp(FlxG.mouse.wheel, -1, 1));
 		selectedType += mouseMoveInThisFrame;
+
+		if(FlxG.keys.justPressed.ENTER){
+			FlxG.switchState(new states.PlayState());
+		}
 		if (selectedType < 0)
 			selectedType = types.length - 1;
 		if (selectedType >= types.length)
@@ -190,10 +196,11 @@ class MarioSpawn extends FlxSprite {
 		var x:Float = (xPos) * w;
 		var y:Float = (yPos) * w;
 		x += w / 2;
-		var subVal:Int = 6;
+		var subVal:Int = 3;
 		x -= subVal;
 		y += w / 2;
 		y += subVal;
+		x -= 7;
 		this.x = x;
 		this.y = FlxG.height - y;
 		return new FlxPoint(this.x, this.y);
