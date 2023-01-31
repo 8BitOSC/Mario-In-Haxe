@@ -137,7 +137,7 @@ class EditorState extends FlxState {
 		selectedType += mouseMoveInThisFrame;
 
 		if(FlxG.keys.justPressed.ENTER){
-			FlxG.switchState(new states.PlayState(this.levelData));
+			FlxG.switchState(new states.PlayState(this.levelData,marioSpawn.x,marioSpawn.y));
 		}
 		if (selectedType < 0)
 			selectedType = types.length - 1;

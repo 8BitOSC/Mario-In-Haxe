@@ -17,6 +17,7 @@ class PlayState extends FlxState {
 	var tiles:TileGroup = null;
 
 	var levelInfo:LevelMeta = null;
+	var mario:Mario = null;
 
 	var tileSize:Float = 16;
 
@@ -28,8 +29,9 @@ class PlayState extends FlxState {
 
 	var cameraBounds:MinAndMax = Util.getCameraBounds();
 
-	override public function new(data:LevelMeta){
+	override public function new(data:LevelMeta,marioX:Float,marioY:Float){
 		this.levelInfo = data;
+		mario = new Mario(marioX,marioY);
 		super();
 	}
 
@@ -44,6 +46,7 @@ class PlayState extends FlxState {
 		tiles = new TileGroup(levelInfo);
 
 		add(tiles);
+		add(mario);
 	}
 
 	override public function update(elapsed:Float):Void {
