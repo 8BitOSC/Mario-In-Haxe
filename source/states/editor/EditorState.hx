@@ -19,7 +19,7 @@ class EditorState extends FlxState {
 	var marioSpawn:MarioSpawn = null;
 	var selectedMarioSpawn:MarioSpawn = null;
 
-	var levelInfo:LevelMeta = {
+	var levelData:LevelMeta = {
 		tiles: [
 			for (i in 0...4)
 				{
@@ -59,10 +59,10 @@ class EditorState extends FlxState {
 		super.create();
 		bgColor = 0xff8f9aff;
 
-		selectedTile = new Tile(0, 0, levelInfo.scale + 0.1);
+		selectedTile = new Tile(0, 0, levelData.scale + 0.1);
 		selectedTile.alpha = 0.4;
 
-		selectedMarioSpawn = new MarioSpawn(0, 0, levelInfo.scale);
+		selectedMarioSpawn = new MarioSpawn(0, 0, levelData.scale);
 		selectedMarioSpawn.alpha = 0.4;
 
 		types = selectedTile.anims;
@@ -72,7 +72,7 @@ class EditorState extends FlxState {
 		FlxG.mouse.visible = true;
 		FlxG.mouse.useSystemCursor = true;
 
-		tileSize = 16 * levelInfo.scale;
+		tileSize = 16 * levelData.scale;
 
 		FlxG.watch.add(FlxG.camera, 'zoom', 'zoom');
 		FlxG.watch.add(scrollPosition, 'x', 'scrollX');
@@ -82,8 +82,8 @@ class EditorState extends FlxState {
 		FlxG.watch.add(FlxG.mouse, 'wheel', 'mouseScroll');
 		FlxG.watch.addMouse();
 
-		tiles = new TileGroup(levelInfo);
-		marioSpawn = new MarioSpawn(levelInfo.spawn.x, levelInfo.spawn.y, levelInfo.scale);
+		tiles = new TileGroup(levelData);
+		marioSpawn = new MarioSpawn(levelData.spawn.x, levelData.spawn.y, levelData.scale);
 
 		add(tiles);
 		add(marioSpawn);
@@ -137,7 +137,7 @@ class EditorState extends FlxState {
 		selectedType += mouseMoveInThisFrame;
 
 		if(FlxG.keys.justPressed.ENTER){
-			FlxG.switchState(new states.PlayState());
+			FlxG.switchState(new states.PlayState(this.levelData));
 		}
 		if (selectedType < 0)
 			selectedType = types.length - 1;
@@ -153,17 +153,17 @@ class EditorState extends FlxState {
 		}
 
 		if(FlxG.keys.justPressed.CONTROL && FlxG.keys.justPressed.S) {
-			var json:String = haxe.Json.stringify(levelInfo);
+			var json:String = haxe.Json.stringify(levelData);
 		}
 
 		if (FlxG.mouse.pressed) {
 			if (types[selectedType] == 'spawn') {
-				levelInfo.spawn.x = x;
-				levelInfo.spawn.y = y;
+				levelData.spawn.x = x;
+				levelData.spawn.y = y;
 				marioSpawn.changePosition(x, y);
 				return;
 			}
-			var nextId:Int = levelInfo.tiles[levelInfo.tiles.length - 1].id + 1;
+			var nextId:Int = levelData.tiles[levelData.tiles.length - 1].id + 1;
 			if (tiles.isTileOccupied(x, y))
 				return;
 			var t:TileMeta = {
@@ -172,8 +172,8 @@ class EditorState extends FlxState {
 				type: types[selectedType],
 				id: nextId
 			};
-			levelInfo.tiles.push(t);
-			tiles.addNewTile(levelInfo, t);
+			levelData.tiles.push(t);
+			tiles.addNewTile(levelData, t);
 		}
 		if (FlxG.mouse.pressedRight) {
 			tiles.destroyTileAtPos(x, y);

@@ -16,7 +16,7 @@ import flixel.addons.ui.FlxUIButton;
 class PlayState extends FlxState {
 	var tiles:TileGroup = null;
 
-	var levelInfo:LevelMeta = {};
+	var levelInfo:LevelMeta = null;
 
 	var tileSize:Float = 16;
 
