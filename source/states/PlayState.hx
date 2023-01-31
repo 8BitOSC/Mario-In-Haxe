@@ -14,7 +14,7 @@ import flixel.text.FlxText;
 import flixel.addons.ui.FlxUIButton;
 
 class PlayState extends FlxState {
-	var tiles:TileGroup = null;
+	public static var tiles:TileGroup = null;
 
 	var levelInfo:LevelMeta = null;
 	var mario:Mario = null;

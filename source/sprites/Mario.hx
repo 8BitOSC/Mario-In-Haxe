@@ -9,7 +9,9 @@ import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.FlxObject;
 import tools.Util;
+import states.PlayState;
 import flixel.FlxSprite;
+import flixel.util.FlxCollision;
 
 class Mario extends FlxSprite {
     var animMap:Map<String,Array<Int>> = new Map<String,Array<Int>>();
@@ -43,8 +45,12 @@ class Mario extends FlxSprite {
             this.vel.y = 5;
             this.animation.play('jump');
         }
-        this.y += this.vel.y;
-        this.vel.y--;
+        this.vel.y -= (5*elapsed);
+        this.y -= this.vel.y;
+        if(FlxCollision.pixelPerfectCheck(this,PlayState.tiles)){
+            this.y += this.vel.y;
+            this.vel.y = 0;
+        }
         this.x += this.vel.x;
     }
 }
