@@ -89,6 +89,8 @@ class EditorState extends FlxState {
 		add(marioSpawn);
 		add(selectedMarioSpawn);
 		add(selectedTile);
+
+		FlxG.switchState(new states.PlayState(this.levelData,marioSpawn.x,marioSpawn.y));
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -107,17 +109,13 @@ class EditorState extends FlxState {
 		selectedTile.y = y;
 		selectedMarioSpawn.x = x;
 		selectedMarioSpawn.y = y;
-		var up:Bool = FlxG.keys.pressed.W || FlxG.keys.pressed.UP;
-		var down:Bool = FlxG.keys.pressed.S || FlxG.keys.pressed.DOWN;
-		var left:Bool = FlxG.keys.pressed.A || FlxG.keys.pressed.LEFT;
-		var right:Bool = FlxG.keys.pressed.D || FlxG.keys.pressed.RIGHT;
-		if (left)
+		if (FlxG.keys.anyJustPressed([A,LEFT]))
 			FlxG.camera.scroll.x -= 4;
-		if (right)
+		if (FlxG.keys.anyJustPressed([D,RIGHT]))
 			FlxG.camera.scroll.x += 4;
-		if (up)
+		if (FlxG.keys.anyJustPressed([UP,W]))
 			FlxG.camera.scroll.y -= 4;
-		if (down)
+		if (FlxG.keys.anyJustPressed([S,DOWN]))
 			FlxG.camera.scroll.y += 4;
 
 		scrollPosition.x = Math.floor(FlxG.camera.scroll.x);

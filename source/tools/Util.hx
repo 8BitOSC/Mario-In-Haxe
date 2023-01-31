@@ -3,6 +3,8 @@ package tools;
 import flixel.FlxG;
 import flixel.FlxCamera;
 import flixel.math.FlxPoint;
+import flixel.math.FlxRect;
+import flixel.FlxSprite;
 
 typedef MinAndMax = {
 	var min:FlxPoint;
@@ -35,5 +37,17 @@ class Util {
      */
     public static function clamp(value:Float, min:Float, max:Float):Float {
         return Math.max(min, Math.min(max, value));
+    }
+
+    /**
+     * convert a rectangle to a FlxSprite
+     * @param rect the rectangle
+     * @return FlxSprite
+     */
+
+    public static function rectToSprite(rect:FlxRect):FlxSprite{
+        var toReturn:FlxSprite = new FlxSprite(rect.x,rect.y);
+        toReturn.makeGraphic(Std.int(rect.height),Std.int(rect.width),0xFF000000);
+        return toReturn;
     }
 }

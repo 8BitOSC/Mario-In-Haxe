@@ -5,13 +5,11 @@ import flixel.group.FlxGroup;
 import sprites.Tile;
 import flixel.FlxG;
 import flixel.FlxState;
-import flixel.addons.display.FlxGridOverlay;
 import flixel.FlxSprite;
 import sprites.TileGroup;
 import flixel.math.FlxPoint;
+import flixel.math.FlxRect;
 import tools.Util;
-import flixel.text.FlxText;
-import flixel.addons.ui.FlxUIButton;
 
 class PlayState extends FlxState {
 	public static var tiles:TileGroup = null;
