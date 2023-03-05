@@ -29,9 +29,9 @@ class PlayState extends FlxState {
 
 	var cameraBounds:MinAndMax = Util.getCameraBounds();
 
-	override public function new(data:LevelMeta,marioX:Float,marioY:Float){
+	override public function new(data:LevelMeta, marioX:Float, marioY:Float) {
 		this.levelInfo = data;
-		mario = new Mario(marioX,marioY+5);
+		mario = new Mario(marioX, marioY - 1);
 		super();
 	}
 
@@ -52,8 +52,11 @@ class PlayState extends FlxState {
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 		cameraBounds = Util.getCameraBounds();
-		if(FlxG.keys.justPressed.E){
+		if (FlxG.keys.justPressed.E) {
 			FlxG.switchState(new EditorState(this.levelInfo));
+		}
+		if (mario.x >= (FlxG.width / 2)-1) {
+			FlxG.camera.scroll.x = mario.x - FlxG.width / 2;
 		}
 	}
 }

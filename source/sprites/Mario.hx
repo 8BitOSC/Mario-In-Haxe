@@ -49,7 +49,7 @@ class Mario extends FlxSprite {
 		FlxG.watch.addQuick('q', this.y);
 		this.animation.play("idle");
 		
-		this.vel.y -= (10 * elapsed);
+		this.vel.y -= (25 * elapsed);
 		var cap:Int = -30;
 		if (this.vel.y <= cap) {
 			this.vel.y = cap;
@@ -100,7 +100,7 @@ class Mario extends FlxSprite {
 		}
 		this.animation.play(state);
 		if (state == 'walk') {
-			frameCycle = (frameCycle+(this.vel.x*0.1)) % 3;
+			frameCycle = (frameCycle+(this.vel.x*0.1)) % 4;
 			this.animation.curAnim.curFrame = Math.ceil(Math.abs(frameCycle));
 			FlxG.watch.addQuick('frame', this.animation.curAnim.curFrame);
 		}
