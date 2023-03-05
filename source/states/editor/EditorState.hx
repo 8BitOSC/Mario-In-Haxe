@@ -55,6 +55,11 @@ class EditorState extends FlxState {
 
 	var cameraBounds:MinAndMax = Util.getCameraBounds();
 
+	override public function new(data:LevelMeta = null){
+		if(data != null) this.levelData = data;
+		super();
+	}
+
 	override public function create():Void {
 		super.create();
 		bgColor = 0xff8f9aff;
@@ -89,8 +94,6 @@ class EditorState extends FlxState {
 		add(marioSpawn);
 		add(selectedMarioSpawn);
 		add(selectedTile);
-
-		FlxG.switchState(new states.PlayState(this.levelData,marioSpawn.x,marioSpawn.y));
 	}
 
 	override public function update(elapsed:Float):Void {
@@ -109,13 +112,13 @@ class EditorState extends FlxState {
 		selectedTile.y = y;
 		selectedMarioSpawn.x = x;
 		selectedMarioSpawn.y = y;
-		if (FlxG.keys.anyJustPressed([A,LEFT]))
+		if (FlxG.keys.anyPressed([A, LEFT]))
 			FlxG.camera.scroll.x -= 4;
-		if (FlxG.keys.anyJustPressed([D,RIGHT]))
+		if (FlxG.keys.anyPressed([D, RIGHT]))
 			FlxG.camera.scroll.x += 4;
-		if (FlxG.keys.anyJustPressed([UP,W]))
+		if (FlxG.keys.anyPressed([UP, W]))
 			FlxG.camera.scroll.y -= 4;
-		if (FlxG.keys.anyJustPressed([S,DOWN]))
+		if (FlxG.keys.anyPressed([S, DOWN]))
 			FlxG.camera.scroll.y += 4;
 
 		scrollPosition.x = Math.floor(FlxG.camera.scroll.x);
@@ -134,8 +137,8 @@ class EditorState extends FlxState {
 		var mouseMoveInThisFrame:Int = Std.int(Util.clamp(FlxG.mouse.wheel, -1, 1));
 		selectedType += mouseMoveInThisFrame;
 
-		if(FlxG.keys.justPressed.ENTER){
-			FlxG.switchState(new states.PlayState(this.levelData,marioSpawn.x,marioSpawn.y));
+		if (FlxG.keys.justPressed.ENTER) {
+			FlxG.switchState(new states.PlayState(this.levelData, marioSpawn.x, marioSpawn.y));
 		}
 		if (selectedType < 0)
 			selectedType = types.length - 1;
@@ -150,7 +153,7 @@ class EditorState extends FlxState {
 			selectedTile.changeType(types[selectedType]);
 		}
 
-		if(FlxG.keys.justPressed.CONTROL && FlxG.keys.justPressed.S) {
+		if (FlxG.keys.justPressed.CONTROL && FlxG.keys.justPressed.S) {
 			var json:String = haxe.Json.stringify(levelData);
 		}
 
@@ -175,6 +178,13 @@ class EditorState extends FlxState {
 		}
 		if (FlxG.mouse.pressedRight) {
 			tiles.destroyTileAtPos(x, y);
+			var i:Int = 0;
+			for (t in levelData.tiles) {
+				if (t.x == x && t.y == y) {
+					levelData.tiles.splice(i, 1);
+				}
+				i++;
+			}
 		}
 	}
 }

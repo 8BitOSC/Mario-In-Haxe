@@ -1,5 +1,6 @@
 package states;
 
+import states.editor.EditorState;
 import sprites.Mario;
 import flixel.group.FlxGroup;
 import sprites.Tile;
@@ -10,6 +11,7 @@ import sprites.TileGroup;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import tools.Util;
+import states.editor.EditorState;
 
 class PlayState extends FlxState {
 	public static var tiles:TileGroup = null;
@@ -29,7 +31,7 @@ class PlayState extends FlxState {
 
 	override public function new(data:LevelMeta,marioX:Float,marioY:Float){
 		this.levelInfo = data;
-		mario = new Mario(marioX,marioY);
+		mario = new Mario(marioX,marioY+5);
 		super();
 	}
 
@@ -50,5 +52,8 @@ class PlayState extends FlxState {
 	override public function update(elapsed:Float):Void {
 		super.update(elapsed);
 		cameraBounds = Util.getCameraBounds();
+		if(FlxG.keys.justPressed.E){
+			FlxG.switchState(new EditorState(this.levelInfo));
+		}
 	}
 }

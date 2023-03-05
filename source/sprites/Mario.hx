@@ -22,6 +22,9 @@ class Mario extends FlxSprite {
 
 	var bounds:FlxSprite = null;
 
+	var frameCycle:Float = 0;
+	var canJump:Bool = true;
+
 	override public function new(x:Float = 0, y:Float = 0) {
 		super(x, y);
 		loadGraphic("assets/images/mario/small.png", true, 17, 18);
@@ -43,23 +46,64 @@ class Mario extends FlxSprite {
 	}
 
 	override public function update(elapsed:Float) {
-        FlxG.watch.addQuick('q',this.y);
-        this.animation.play("idle");
-		if (FlxG.keys.anyJustPressed([UP,W,SPACE])) {
-			this.vel.y = 5;
-            state = 'jump';
-		}
-        var yBeforeCollision = this.y;
+		FlxG.watch.addQuick('q', this.y);
+		this.animation.play("idle");
+		
 		this.vel.y -= (10 * elapsed);
+		var cap:Int = -30;
+		if (this.vel.y <= cap) {
+			this.vel.y = cap;
+		}
+		cap = -3;
+		if (this.vel.x <= cap) {
+			this.vel.x = cap;
+		}
+		if (this.vel.x >= Math.abs(cap)) {
+			this.vel.x = Math.abs(cap);
+		}
+		var yBeforeCollision = this.y;
 		this.y -= this.vel.y;
-		if (PlayState.tiles.collidesWith(this)) {
+		if (PlayState.tiles.collidesWith(this).collided) {
             this.y = yBeforeCollision;
 			this.vel.y = 0;
             state = 'idle';
 		}
+		this.y -= 5;
+		this.y += 5;
+		if (FlxG.keys.anyPressed([RIGHT, D])) {
+			this.flipX = false;
+			this.vel.x += 1;
+		}
+		if (FlxG.keys.anyPressed([LEFT, A])) {
+			this.flipX = true;
+			this.vel.x -= .64;
+		}
+		if (FlxG.keys.anyJustPressed([UP, W, SPACE]) && canJump) {
+			this.vel.y = 5;
+		}
+		var xBeforeCollision = this.x;
+		this.vel.x *= (elapsed / 0.0185185185);
 		this.x += this.vel.x;
-
-        //this.animation.play(state);
+		if (PlayState.tiles.collidesWith(this).collided) {
+            this.x = xBeforeCollision;
+			this.vel.x = 0;
+		}
+		if (Math.abs(this.vel.x) > 0)
+			this.state = 'walk';
+		if (Math.abs(this.vel.x) < 0.1)
+			this.state = 'idle';
+		if (Math.abs(this.vel.y) > 0){
+			this.state = 'jump';
+			canJump = false;
+		} else {
+			canJump = true;
+		}
+		this.animation.play(state);
+		if (state == 'walk') {
+			frameCycle = (frameCycle+(this.vel.x*0.1)) % 3;
+			this.animation.curAnim.curFrame = Math.ceil(Math.abs(frameCycle));
+			FlxG.watch.addQuick('frame', this.animation.curAnim.curFrame);
+		}
 		super.update(elapsed);
 	}
 }

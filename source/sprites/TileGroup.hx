@@ -153,15 +153,15 @@ class TileGroup extends FlxTypedGroup<Tile> {
 	/**
 	 * check if the tiles collide with a sprite
 	 * @param sprite the sprite to check
-	 * @return Bool
+	 * @return Dynamic
 	 */
 
-	public function collidesWith(sprite:FlxSprite):Bool{
+	public function collidesWith(sprite:FlxSprite):Dynamic{
 		for(t in this.members){
 			if(FlxCollision.pixelPerfectCheck(t,sprite)){
-				return true;
+				return {"collided":true,"positions":t.axis};
 			}
 		}
-		return false;
+		return {"collided":false,"positions":null};
 	}
 }
