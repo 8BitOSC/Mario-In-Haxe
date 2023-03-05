@@ -55,7 +55,7 @@ class PlayState extends FlxState {
 		if (FlxG.keys.justPressed.E) {
 			FlxG.switchState(new EditorState(this.levelInfo));
 		}
-		if (mario.x >= (FlxG.width / 2)-1) {
+		if (mario.x >= (FlxG.width / 2)) {
 			FlxG.camera.scroll.x = mario.x - FlxG.width / 2;
 		}
 	}

@@ -49,7 +49,7 @@ class Mario extends FlxSprite {
 		FlxG.watch.addQuick('q', this.y);
 		this.animation.play("idle");
 		
-		this.vel.y -= (25 * elapsed);
+		this.vel.y -= (15 * elapsed);
 		var cap:Int = -30;
 		if (this.vel.y <= cap) {
 			this.vel.y = cap;
@@ -62,8 +62,10 @@ class Mario extends FlxSprite {
 			this.vel.x = Math.abs(cap);
 		}
 		var yBeforeCollision = this.y;
-		this.y -= this.vel.y;
+		if(this.vel.y > 1) this.y -= this.vel.y*1.1;
+		else this.y -= this.vel.y;
 		if (PlayState.tiles.collidesWith(this).collided) {
+			
             this.y = yBeforeCollision;
 			this.vel.y = 0;
             state = 'idle';
